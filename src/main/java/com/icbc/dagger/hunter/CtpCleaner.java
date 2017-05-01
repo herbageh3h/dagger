@@ -6,33 +6,33 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.icbc.dagger.hunter.data.CtpSoft;
-import com.icbc.dagger.hunter.data.ThirdPartySoft;
+import com.icbc.dagger.hunter.data.OpenSoft;
 import com.icbc.dagger.util.FileUtil;
 
 public class CtpCleaner {
     private CtpSoft ctpSoft;
 
-    public void cleanCtp(List<ThirdPartySoft> fullList) {
-        List<ThirdPartySoft> ctpList = new ArrayList<ThirdPartySoft>();
+    public void cleanCtp(List<OpenSoft> fullList) {
+        List<OpenSoft> ctpList = new ArrayList<OpenSoft>();
 
-        for (ThirdPartySoft soft : fullList) {
+        for (OpenSoft soft : fullList) {
             if ("ctp".equals(soft.getCategory())) {
                 ctpList.add(soft);
             }
         }
 
-        for (ThirdPartySoft ctp : ctpList) {
+        for (OpenSoft ctp : ctpList) {
             String path = ctp.getPath();
             String dir = new File(path).getParent();
-            List<ThirdPartySoft> componentList = ctpSoft.getCtpComponents(ctp.signature());
+            List<OpenSoft> componentList = ctpSoft.getCtpComponents(ctp.signature());
 
             if (componentList == null) {
                 continue;
             }
 
-            Iterator<ThirdPartySoft> it = fullList.iterator();
+            Iterator<OpenSoft> it = fullList.iterator();
             while (it.hasNext()) {
-                ThirdPartySoft soft = it.next();
+                OpenSoft soft = it.next();
 
                 if (!FileUtil.sameDir(soft.getPath(), dir)) {
                     continue;

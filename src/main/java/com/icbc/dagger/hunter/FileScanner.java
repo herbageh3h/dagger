@@ -5,35 +5,13 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.icbc.dagger.hunter.checker.AntChecker;
-import com.icbc.dagger.hunter.checker.AntlrChecker;
-import com.icbc.dagger.hunter.checker.AopallianceChecker;
-import com.icbc.dagger.hunter.checker.AsmChecker;
-import com.icbc.dagger.hunter.checker.AxiomChecker;
-import com.icbc.dagger.hunter.checker.BatisChecker;
 import com.icbc.dagger.hunter.checker.Checker;
-import com.icbc.dagger.hunter.checker.CommonsChecker;
-import com.icbc.dagger.hunter.checker.CxfChecker;
-import com.icbc.dagger.hunter.checker.Dom4jChecker;
-import com.icbc.dagger.hunter.checker.FastjsonChecker;
-import com.icbc.dagger.hunter.checker.HttpComponentsChecker;
-import com.icbc.dagger.hunter.checker.JacksonChecker;
-import com.icbc.dagger.hunter.checker.JbpmChecker;
-import com.icbc.dagger.hunter.checker.JdomChecker;
-import com.icbc.dagger.hunter.checker.JedisChecker;
-import com.icbc.dagger.hunter.checker.JettyChecker;
-import com.icbc.dagger.hunter.checker.JfreechartChecker;
-import com.icbc.dagger.hunter.checker.JxlChecker;
-import com.icbc.dagger.hunter.checker.Log4jChecker;
-import com.icbc.dagger.hunter.checker.PoiChecker;
-import com.icbc.dagger.hunter.checker.Slf4jChecker;
-import com.icbc.dagger.hunter.checker.SpringChecker;
-import com.icbc.dagger.hunter.checker.StrutsChecker;
-import com.icbc.dagger.hunter.checker.VelocityChecker;
-import com.icbc.dagger.hunter.data.ThirdPartySoft;
+import com.icbc.dagger.hunter.checker.JarChecker;
+import com.icbc.dagger.hunter.data.OpenSoft;
 import com.icbc.dagger.hunter.excluder.CtpExcluder;
 import com.icbc.dagger.hunter.excluder.Excluder;
 import com.icbc.dagger.util.PrintUtil;
+import com.icbc.dagger.util.StringUtil;
 import com.icbc.dagger.util.TimeStat;
 
 public class FileScanner {
@@ -42,6 +20,10 @@ public class FileScanner {
     private FilenameFilter traverseFilter;
 
     public List<String> genFileList(String path) {
+        if (StringUtil.isBlank(path)) {
+            return new ArrayList<String>();
+        }
+
         File root = new File(path);
         File[] files = root.listFiles(traverseFilter);
 
@@ -97,44 +79,18 @@ public class FileScanner {
         scanner.setTraverseFilter(new DefaultFilenameFilter());
 
         List<Checker> checkerList = new ArrayList<Checker>();
-
-        checkerList.add(new FastjsonChecker());
-        checkerList.add(new JacksonChecker());
-        checkerList.add(new StrutsChecker());
-        checkerList.add(new BatisChecker());
-        checkerList.add(new JbpmChecker());
-        checkerList.add(new SpringChecker());
-        checkerList.add(new JdomChecker());
-        checkerList.add(new Dom4jChecker());
-        checkerList.add(new CxfChecker());
-        checkerList.add(new VelocityChecker());
-        checkerList.add(new Slf4jChecker());
-        checkerList.add(new PoiChecker());
-        checkerList.add(new JfreechartChecker());
-        checkerList.add(new Log4jChecker());
-        checkerList.add(new JettyChecker());
-        checkerList.add(new CommonsChecker());
-        checkerList.add(new JedisChecker());
-        checkerList.add(new AntChecker());
-        checkerList.add(new JxlChecker());
-        checkerList.add(new HttpComponentsChecker());
-        checkerList.add(new AntlrChecker());
-        checkerList.add(new AopallianceChecker());
-        checkerList.add(new AsmChecker());
-        checkerList.add(new AxiomChecker());
-
+        checkerList.add(new JarChecker());
         scanner.setCheckerList(checkerList);
 
-        List<Excluder> eliminatorList = new ArrayList<Excluder>();
-        eliminatorList.add(new CtpExcluder());
-        scanner.setExcluderList(eliminatorList);
+        List<Excluder> exluderList = new ArrayList<Excluder>();
+        exluderList.add(new CtpExcluder());
+        scanner.setExcluderList(exluderList);
 
-        List<String> fileList = scanner.genFileList("D:/repos/cms");
+        List<String> fileList = scanner.genFileList("/Users/huanghao/repos/cms");
         PrintUtil.printList(fileList, "file_list.txt");
 
         SoftScanner softScanner = new SoftScanner();
-        softScanner.setCheckerList(checkerList);
-        List<ThirdPartySoft> softList = softScanner.getSoftList(fileList);
+        List<OpenSoft> softList = softScanner.genSoftList(fileList);
         PrintUtil.printList(softList, "soft_list.csv");
 
         timer.end();

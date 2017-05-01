@@ -5,11 +5,14 @@ import java.util.List;
 
 import com.icbc.dagger.hunter.checker.Checker;
 import com.icbc.dagger.hunter.data.CtpSoft;
-import com.icbc.dagger.hunter.data.ThirdPartySoft;
+import com.icbc.dagger.hunter.data.OpenSoft;
 import com.icbc.dagger.hunter.excluder.BlackListExcluder;
 import com.icbc.dagger.hunter.excluder.Excluder;
 import com.icbc.dagger.util.PropUtil;
 import com.icbc.dagger.util.TimeStat;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Hunter: code monitor tool.
@@ -23,7 +26,10 @@ import com.icbc.dagger.util.TimeStat;
  * 
  */
 public class Hunter {
+    private final static Logger logger = LoggerFactory.getLogger(Hunter.class);
+
     public void runScanner() {
+        logger.info("Begin scanning process.");
 
         FileScanner scanner = new FileScanner();
         scanner.setTraverseFilter(new DefaultFilenameFilter());
@@ -40,8 +46,7 @@ public class Hunter {
         List<String> fileList = scanner.genFileList(scandir);
 
         SoftScanner softScanner = new SoftScanner();
-        softScanner.setCheckerList(checkerList);
-        List<ThirdPartySoft> softList = softScanner.getSoftList(fileList);
+        List<OpenSoft> softList = softScanner.genSoftList(fileList);
 
         SoftCsvWriter writer = new SoftCsvWriter();
         writer.printSoftList(softList, "soft_list.csv");
@@ -52,9 +57,12 @@ public class Hunter {
         cleaner.setCtpSoft(ctp);
         cleaner.cleanCtp(softList);
         writer.printSoftList(softList, "clean_list.csv");
+
+        logger.info("End scanning process.");
     }
 
     public static void main(String[] args) {
+        System.out.println("Starting program.");
         TimeStat timer = new TimeStat();
         timer.start();
 

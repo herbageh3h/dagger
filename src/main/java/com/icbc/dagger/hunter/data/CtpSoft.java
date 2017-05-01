@@ -8,30 +8,30 @@ import java.util.Map;
 import com.icbc.dagger.hunter.SoftCsvReader;
 
 public class CtpSoft {
-    private Map<String, List<ThirdPartySoft>> ctpSoft;
+    private Map<String, List<OpenSoft>> ctpSoft;
 
     public void loadCsv() {
         SoftCsvReader softReader = new SoftCsvReader();
-        List<ThirdPartySoft> ctpJarList = softReader.readCsv("ctp_jar.csv");
+        List<OpenSoft> ctpJarList = softReader.readCsv("ctp_jar.csv");
 
-        ctpSoft = new HashMap<String, List<ThirdPartySoft>>();
-        for (ThirdPartySoft jar : ctpJarList) {
+        ctpSoft = new HashMap<String, List<OpenSoft>>();
+        for (OpenSoft jar : ctpJarList) {
             String app = jar.getApp();
 
             if (ctpSoft.containsKey(app)) {
                 ctpSoft.get(app).add(jar);
             } else {
-                List<ThirdPartySoft> jarList = new ArrayList<ThirdPartySoft>();
+                List<OpenSoft> jarList = new ArrayList<OpenSoft>();
                 jarList.add(jar);
                 ctpSoft.put(app, jarList);
             }
         }
 
-        Map<String, List<ThirdPartySoft>> signatureMap = new HashMap<String, List<ThirdPartySoft>>();
+        Map<String, List<OpenSoft>> signatureMap = new HashMap<String, List<OpenSoft>>();
         for (String ctpVersion : ctpSoft.keySet()) {
-            List<ThirdPartySoft> jarList = ctpSoft.get(ctpVersion);
+            List<OpenSoft> jarList = ctpSoft.get(ctpVersion);
 
-            for (ThirdPartySoft jar : jarList) {
+            for (OpenSoft jar : jarList) {
                 if ("ctp".equals(jar.getCategory())) {
                     signatureMap.put(jar.signature(), jarList);
                 }
@@ -40,7 +40,7 @@ public class CtpSoft {
         ctpSoft.putAll(signatureMap);
     }
 
-    public List<ThirdPartySoft> getCtpComponents(String signature) {
+    public List<OpenSoft> getCtpComponents(String signature) {
         return ctpSoft.get(signature);
     }
 

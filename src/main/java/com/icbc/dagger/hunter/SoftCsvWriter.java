@@ -6,18 +6,18 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.List;
 
-import com.icbc.dagger.hunter.data.ThirdPartySoft;
+import com.icbc.dagger.hunter.data.OpenSoft;
 import com.icbc.dagger.util.PropUtil;
 
 public class SoftCsvWriter {
-    public void printSoftList(List<ThirdPartySoft> list, String fileName) {
+    public void printSoftList(List<OpenSoft> list, String fileName) {
         PrintWriter pw = null;
 
         try {
             String tmpdir = PropUtil.getProperty("tmpdir");
             pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(tmpdir + File.separator + fileName))));
 
-            for (ThirdPartySoft soft : list) {
+            for (OpenSoft soft : list) {
                 pw.println(soft.csv());
             }
 

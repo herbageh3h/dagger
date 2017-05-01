@@ -6,28 +6,25 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.icbc.dagger.hunter.checker.Checker;
-import com.icbc.dagger.hunter.checker.FastjsonChecker;
-import com.icbc.dagger.hunter.checker.JacksonChecker;
-import com.icbc.dagger.hunter.data.ThirdPartySoft;
+import com.icbc.dagger.hunter.data.OpenSoft;
 import com.icbc.dagger.util.PrintUtil;
 import com.icbc.dagger.util.TimeStat;
 
 public class SoftScanner {
     private AppFinder appFinder = new AppFinder();
+    private CategoryFinder categoryFinder = new CategoryFinder();
     private VersionFinder versionFinder = new VersionFinder();
-    private List<Checker> checkerList;
 
-    public List<ThirdPartySoft> getSoftList(List<String> fileList) {
-        List<ThirdPartySoft> softList = new ArrayList<ThirdPartySoft>();
+    public List<OpenSoft> genSoftList(List<String> fileList) {
+        List<OpenSoft> softList = new ArrayList<OpenSoft>();
 
         for (String path : fileList) {
-            ThirdPartySoft soft = new ThirdPartySoft();
+            OpenSoft soft = new OpenSoft();
             soft.setPath(path);
 
             fillApp(soft);
 
-            soft.setCategory(findCategory(path));
+            fillCategory(soft);
 
             fillVersion(soft);
 
@@ -37,25 +34,16 @@ public class SoftScanner {
         return softList;
     }
 
-    private void fillVersion(ThirdPartySoft soft) {
+    private void fillVersion(OpenSoft soft) {
         versionFinder.fillVersion(soft);
     }
 
-    private void fillApp(ThirdPartySoft soft) {
+    private void fillApp(OpenSoft soft) {
         appFinder.fillApp(soft);
     }
 
-    private String findCategory(String path) {
-        for (Checker checker : checkerList) {
-            if (checker.pass(path)) {
-                return checker.getName();
-            }
-        }
-        return "NO-CATEGORY";
-    }
-
-    public void setCheckerList(List<Checker> checkerList) {
-        this.checkerList = checkerList;
+    private void fillCategory(OpenSoft soft) {
+        categoryFinder.fillCategory(soft);
     }
 
     public static void main(String[] args) throws Exception {
@@ -72,12 +60,8 @@ public class SoftScanner {
         br.close();
 
         SoftScanner softTool = new SoftScanner();
-        List<Checker> checkerList = new ArrayList<Checker>();
-        checkerList.add(new FastjsonChecker());
-        checkerList.add(new JacksonChecker());
-        softTool.setCheckerList(checkerList);
 
-        List<ThirdPartySoft> softList = softTool.getSoftList(fileList);
+        List<OpenSoft> softList = softTool.genSoftList(fileList);
         PrintUtil.printList(softList, "soft_list.csv");
 
         timer.end();

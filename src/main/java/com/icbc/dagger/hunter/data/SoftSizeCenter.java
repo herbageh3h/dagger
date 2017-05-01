@@ -8,20 +8,20 @@ import java.util.Map;
 import com.icbc.dagger.hunter.SoftCsvReader;
 
 public class SoftSizeCenter {
-    private Map<String, List<ThirdPartySoft>> center;
+    private Map<String, List<OpenSoft>> center;
 
     public void loadCsv() {
         SoftCsvReader softReader = new SoftCsvReader();
-        List<ThirdPartySoft> softList = softReader.readCsv("jar_size.csv");
+        List<OpenSoft> softList = softReader.readCsv("jar_size.csv");
 
-        center = new HashMap<String, List<ThirdPartySoft>>();
-        for (ThirdPartySoft soft : softList) {
+        center = new HashMap<String, List<OpenSoft>>();
+        for (OpenSoft soft : softList) {
             String name = soft.getName();
 
             if (center.containsKey(name)) {
                 center.get(name).add(soft);
             } else {
-                List<ThirdPartySoft> softHistList = new ArrayList<ThirdPartySoft>();
+                List<OpenSoft> softHistList = new ArrayList<OpenSoft>();
                 softHistList.add(soft);
                 center.put(name, softHistList);
             }
@@ -32,7 +32,7 @@ public class SoftSizeCenter {
         return center.containsKey(softName);
     }
 
-    public List<ThirdPartySoft> getSoftHist(String softName) {
+    public List<OpenSoft> getSoftHist(String softName) {
         return center.get(softName);
     }
 }

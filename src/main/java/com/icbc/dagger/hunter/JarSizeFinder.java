@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.icbc.dagger.hunter.checker.Checker;
 import com.icbc.dagger.hunter.checker.JarChecker;
-import com.icbc.dagger.hunter.data.ThirdPartySoft;
+import com.icbc.dagger.hunter.data.OpenSoft;
 import com.icbc.dagger.hunter.excluder.Excluder;
 import com.icbc.dagger.util.FileUtil;
 import com.icbc.dagger.util.PrintUtil;
@@ -15,11 +15,11 @@ public class JarSizeFinder {
     private AppFinder appFinder = new AppFinder();
     private VersionFinder versionFinder = new VersionFinder();
 
-    public List<ThirdPartySoft> scanJar(String dir) {
+    public List<OpenSoft> scanJar(String dir) {
         return scanJar(dir, "");
     }
 
-    public List<ThirdPartySoft> scanJar(String dir, String softName) {
+    public List<OpenSoft> scanJar(String dir, String softName) {
         FileScanner scanner = new FileScanner();
         scanner.setTraverseFilter(new DefaultFilenameFilter());
 
@@ -33,9 +33,9 @@ public class JarSizeFinder {
         List<String> fileList = scanner.genFileList(dir);
         PrintUtil.printList(fileList, "jar_list.txt");
 
-        List<ThirdPartySoft> jarList = new ArrayList<ThirdPartySoft>();
+        List<OpenSoft> jarList = new ArrayList<OpenSoft>();
         for (String path : fileList) {
-            ThirdPartySoft jar = new ThirdPartySoft();
+            OpenSoft jar = new OpenSoft();
             jar.setPath(path);
 
             if (!"".equals(softName)) {
@@ -55,7 +55,7 @@ public class JarSizeFinder {
     public static void main(String[] args) {
         JarSizeFinder scanner = new JarSizeFinder();
         String scandir = PropUtil.getProperty("scandir");
-        List<ThirdPartySoft> jarList = scanner.scanJar(scandir, "ant");
+        List<OpenSoft> jarList = scanner.scanJar(scandir, "ant");
         PrintUtil.printList(jarList, "jar_size_list.csv");
     }
 }

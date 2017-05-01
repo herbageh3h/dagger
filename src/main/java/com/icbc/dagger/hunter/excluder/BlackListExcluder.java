@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlackListExcluder implements Excluder {
-    private List<String> blackList = new ArrayList<String>();
+    private List<String> blackList;
 
-    {
+    public BlackListExcluder() {
+        blackList = new ArrayList<String>();
         blackList.add("commons-httpclient-test.jar");
     };
 

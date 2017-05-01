@@ -10,12 +10,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import com.icbc.dagger.hunter.data.ThirdPartySoft;
+import com.icbc.dagger.hunter.data.OpenSoft;
 
 public class MetaHelper {
     private Pattern pattern = Pattern.compile("meta-inf.*?maven.*?pom\\.properties$");
 
-    public String findVersion(ThirdPartySoft soft) {
+    public String findVersion(OpenSoft soft) {
         String path = soft.getPath();
 
         ZipInputStream zin = null;

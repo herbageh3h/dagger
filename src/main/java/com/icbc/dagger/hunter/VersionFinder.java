@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.icbc.dagger.hunter.data.ThirdPartySoft;
+import com.icbc.dagger.hunter.data.OpenSoft;
 import com.icbc.dagger.hunter.finder.CtpHelper;
 import com.icbc.dagger.hunter.finder.MetaHelper;
 import com.icbc.dagger.hunter.finder.SizeHelper;
@@ -15,7 +15,7 @@ public class VersionFinder {
     private MetaHelper metaHelper = new MetaHelper();
     private SizeHelper sizeHelper = new SizeHelper();
 
-    public void fillVersion(ThirdPartySoft soft) {
+    public void fillVersion(OpenSoft soft) {
         String path = soft.getPath();
         String fileName = new File(path).getName();
 
@@ -60,15 +60,15 @@ public class VersionFinder {
         soft.setVersion(version);
     }
 
-    private String findVersionByMeta(ThirdPartySoft soft) {
+    private String findVersionByMeta(OpenSoft soft) {
         return metaHelper.findVersion(soft);
     }
 
-    private String findVersionBySize(ThirdPartySoft soft) {
+    private String findVersionBySize(OpenSoft soft) {
         return sizeHelper.findVersion(soft);
     }
 
-    private String findVersionByCtp(ThirdPartySoft soft) {
+    private String findVersionByCtp(OpenSoft soft) {
         return ctpHelper.findVersion(soft);
     }
 
@@ -83,8 +83,8 @@ public class VersionFinder {
     public static void main(String[] args) throws Exception {
         VersionFinder vf = new VersionFinder();
 
-        ThirdPartySoft jar = new ThirdPartySoft();
-        jar.setPath("D:/repos/gil/company/hbaseoec/WebContent/WEB-INF/lib/ant-launcher.jar");
+        OpenSoft jar = new OpenSoft();
+        jar.setPath("/Users/huanghao/repos/gil/solr/CrawlService/DBCrawler/lib/easymockclassextension.jar");
         vf.fillVersion(jar);
         System.out.println(jar);
     }

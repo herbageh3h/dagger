@@ -6,13 +6,13 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.icbc.dagger.hunter.data.ThirdPartySoft;
+import com.icbc.dagger.hunter.data.OpenSoft;
 import com.icbc.dagger.util.PrintUtil;
 import com.icbc.dagger.util.PropUtil;
 
 public class SoftCsvReader {
-    public List<ThirdPartySoft> readCsv(String fileName) {
-        List<ThirdPartySoft> retList = new ArrayList<ThirdPartySoft>();
+    public List<OpenSoft> readCsv(String fileName) {
+        List<OpenSoft> retList = new ArrayList<OpenSoft>();
         String datadir = PropUtil.getProperty("datadir");
 
         BufferedReader br = null;
@@ -30,7 +30,7 @@ public class SoftCsvReader {
                     break;
                 }
 
-                ThirdPartySoft soft = new ThirdPartySoft();
+                OpenSoft soft = new OpenSoft();
                 soft.setApp(ss[0]);
                 soft.setCategory(ss[1]);
                 soft.setName(ss[2]);
@@ -59,7 +59,7 @@ public class SoftCsvReader {
 
     public static void main(String[] args) {
         SoftCsvReader softReader = new SoftCsvReader();
-        List<ThirdPartySoft> ctpJarList = softReader.readCsv("ctp_jar.csv");
+        List<OpenSoft> ctpJarList = softReader.readCsv("ctp_jar.csv");
         PrintUtil.printList(ctpJarList, "ctp_jar_copy.csv");
     }
 
